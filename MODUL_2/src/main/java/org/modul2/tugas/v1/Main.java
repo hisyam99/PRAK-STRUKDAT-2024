@@ -97,6 +97,8 @@ public class Main {
                 default:
                     System.out.println("Opsi tidak valid. Silakan pilih opsi yang benar.");
             }
+
+            scanner.close();
         }
     }
 }
