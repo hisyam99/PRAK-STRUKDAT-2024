@@ -1,14 +1,30 @@
 package org.modul2.tugas.v2;
 
-class Contact {
-    String nama;
-    String nomorTelepon;
-    Contact next;
+class Contact<T> {
+    private T nama;
+    private T nomorTelepon;
+    private Contact<T> next;
 
-    public Contact(String nama, String nomorTelepon) {
+    public Contact(T nama, T nomorTelepon) {
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
         this.next = null;
+    }
+
+    public T getNama() {
+        return nama;
+    }
+
+    public T getNomorTelepon() {
+        return nomorTelepon;
+    }
+
+    public void setNext(Contact<T> next) {
+        this.next = next;
+    }
+
+    public Contact<T> getNext() {
+        return next;
     }
 
     @Override
