@@ -1,14 +1,13 @@
 package org.modul4.tugas.v2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class OnlineVotingSystem {
-    private static final DataPemilih dataPemilih = new DataPemilih(); // Objek DataPemilih digunakan secara global
+    private static final DataPemilih dataPemilih = new DataPemilih();
 
     public static void main(String[] args) {
         OnlineVotingSystem votingSystem = new OnlineVotingSystem();
+        dataPemilih.initializeCandidates();
         votingSystem.showMainMenu();
     }
 
@@ -35,6 +34,7 @@ public class OnlineVotingSystem {
                     dataPemilih.displayResults();
                     break;
                 case 4:
+                    dataPemilih.logout();
                     System.out.println("Terima kasih telah menggunakan Sistem Voting Online.");
                     break;
                 default:
@@ -45,4 +45,3 @@ public class OnlineVotingSystem {
         }
     }
 }
-
