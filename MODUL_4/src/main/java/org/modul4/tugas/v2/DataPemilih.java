@@ -2,12 +2,15 @@ package org.modul4.tugas.v2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 class DataPemilih {
     private final HashMap<String, Integer> candidates = new HashMap<>();
     private final HashMap<String, String> users = new HashMap<>();
     private final HashMap<String, ArrayList<String>> userDetails = new HashMap<>();
+    private final HashSet<String> votedUsers = new HashSet<>();
+
     private String loggedInUser = null;
 
     public void register(Scanner scanner) {
@@ -41,10 +44,11 @@ class DataPemilih {
             System.out.print("Apakah ingin register lagi? (ya/tidak): ");
             String choice = scanner.nextLine();
             if (choice.equalsIgnoreCase("ya")) {
+                login(scanner);
+            } else {
+
                 OnlineVotingSystem votingSystem = new OnlineVotingSystem();
                 votingSystem.showMainMenu();
-            } else {
-                login(scanner);
             }
         } catch (Exception e) {
             System.out.println("Gagal Mendaftar: " + e.getMessage());
@@ -82,21 +86,35 @@ class DataPemilih {
         }
     }
 
+    public void initializeCandidates() {
+        candidates.put("Kandidat A", 0);
+        candidates.put("Kandidat B", 0);
+        candidates.put("Kandidat C", 0);
+    }
+
     public void showVotingOptions(Scanner scanner) {
         System.out.println("Selamat datang di sistem voting:");
         System.out.println("Pilih kandidat yang ingin Anda dukung:");
+        System.out.println("- Kandidat A");
         System.out.println("- Kandidat B");
         System.out.println("- Kandidat C");
-        System.out.println("- Kandidat A");
         System.out.print("Masukkan nama kandidat (atau ketik 'selesai' untuk keluar): ");
         String candidateName = scanner.nextLine();
 
-        if (candidateName.equalsIgnoreCase("selesai")) {
-            logout();
-            return;
+        switch (candidateName) {
+            case "Kandidat A":
+            case "Kandidat B":
+            case "Kandidat C":
+                vote(candidateName);
+                break;
+            case "selesai":
+                OnlineVotingSystem votingSystem = new OnlineVotingSystem();
+                votingSystem.showMainMenu();
+                break;
+            default:
+                System.out.println("Opsi tidak valid. Harap pilih kandidat yang tersedia.");
+                showVotingOptions(scanner);
         }
-
-        vote(candidateName);
     }
 
     public void vote(String candidateName) {
@@ -105,14 +123,22 @@ class DataPemilih {
             return;
         }
 
-        if (!candidates.containsKey(candidateName)) {
-            candidates.put(candidateName, 1);
-        } else {
+        if (votedUsers.contains(loggedInUser)) {
+            System.out.println("Anda sudah memilih dan tidak dapat memilih lagi.");
+            OnlineVotingSystem votingSystem = new OnlineVotingSystem();
+            votingSystem.showMainMenu();
+            return;
+        }
+
+        if (candidates.containsKey(candidateName)) {
             candidates.put(candidateName, candidates.get(candidateName) + 1);
         }
+
+        votedUsers.add(loggedInUser);
         System.out.println("Terima kasih, suara Anda telah direkam.");
         showVotingOptions(new Scanner(System.in));
     }
+
 
     public void displayResults() {
         System.out.println("Hasil Voting:");
